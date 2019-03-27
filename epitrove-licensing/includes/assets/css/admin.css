@@ -1,0 +1,17 @@
+.mkp_active{
+    color: green;
+    font-weight: bold;
+    padding: 1% 0;
+}
+
+.mkp_inactive{
+    color: red;
+    font-weight: bold;
+    padding: 1% 0;
+}
+
+.mkp_expire{
+    color: grey;
+    font-weight: bold;
+    padding: 1% 0;
+}
