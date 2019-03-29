@@ -1,2 +1,2 @@
-# epitrove-licensing-addon
-Epitrove Licensing Addon
+# Epitrove Helper Addon
+
