@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       Epitrove Licensing (Beta 1)
+ * Plugin Name:       Epitrove Helper (Beta 1)
  * Plugin URI:        http://wisdmlabs.com
  * Description:       Licensing addon for all epitrove products.
- * Version:           1.0.0
+ * Version:           2.0.0
  * Author:            WisdmLabs
  * Author URI:        http://wisdmlabs.com/
  * License:           GPL-2.0+
@@ -24,7 +24,6 @@ function run_epitrove_licensing()
     // $plugin->run();
 }
 run_epitrove_licensing();
-
 
 // Check updates for licensing addon
 require 'addon-updater/plugin-update-checker.php';
