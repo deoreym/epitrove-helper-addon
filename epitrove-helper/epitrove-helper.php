@@ -3,12 +3,12 @@
  * Plugin Name:       Epitrove Helper (Beta 1)
  * Plugin URI:        http://wisdmlabs.com
  * Description:       Licensing addon for all epitrove products.
- * Version:           2.0.0
+ * Version:           0.1.0
  * Author:            WisdmLabs
  * Author URI:        http://wisdmlabs.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       epitrove-licensing
+ * Text Domain:       epitrove-helper
  * Domain Path:       /languages
  */
 
@@ -17,20 +17,20 @@ if (! defined('WPINC')) {
     die;
 }
 
-function run_epitrove_licensing()
+function run_epitrove_helper()
 {
     require plugin_dir_path(__FILE__).'includes/class-epitrove-license.php';
     new \Licensing\EpitroveLicense();
     // $plugin->run();
 }
-run_epitrove_licensing();
+run_epitrove_helper();
 
 // Check updates for licensing addon
 require 'addon-updater/plugin-update-checker.php';
 $addon_updater = Puc_v4_Factory::buildUpdateChecker(
-    'https://github.com/kumar-rajpurohit/epitrove-licensing-addon/',
+    'https://github.com/WisdmLabs/epitrove-helper-addon',
     __FILE__,
-    'epitrove-licensing'
+    'epitrove-helper-addon'
 );
 
 //Optional: Set the branch that contains the stable release.
