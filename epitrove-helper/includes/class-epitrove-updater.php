@@ -30,7 +30,6 @@ if (!class_exists('Licensing\EpitroveUpdater')) {
          */
         public function __construct($pluginFile, $apiData = null)
         {
-            global $edd_plugin_data;
             $this->apiUrl = trailingslashit($apiData['storeUrl']);
             $this->apiData = urlencode_deep($apiData);
             if (!isset($apiData['isTheme']) || !$apiData['isTheme']) {

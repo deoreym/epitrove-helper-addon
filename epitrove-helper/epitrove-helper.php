@@ -25,7 +25,7 @@ function run_epitrove_helper()
 }
 run_epitrove_helper();
 
-// Check updates for licensing addon
+// Check updates for epitrove-helper addon
 require 'addon-updater/plugin-update-checker.php';
 $addon_updater = Puc_v4_Factory::buildUpdateChecker(
     'https://github.com/WisdmLabs/epitrove-helper-addon',
@@ -35,3 +35,10 @@ $addon_updater = Puc_v4_Factory::buildUpdateChecker(
 
 //Optional: Set the branch that contains the stable release.
 // $addon_updater->setBranch('stable-branch-name');
+
+function run_epitrove_updater()
+{
+    require plugin_dir_path(__FILE__).'includes/class-epitrove-updater.php';
+    new \Licensing\EpitroveUpdater();
+}
+run_epitrove_updater();
