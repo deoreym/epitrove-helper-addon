@@ -244,13 +244,13 @@ if (!class_exists('Licensing\EpitroveLicense')) {
             $response = wp_remote_post(
                 $url,
                 array(
-                    'method'      => 'POST',
-                    'timeout' => 45,
-                    'redirection' => 5,
-                    'httpversion' => '1.0',
-                    'blocking' => true,
-                    'headers' => array(),
-                    'body'        => $data
+                    'method'        => 'POST',
+                    'timeout'       => 45,
+                    'redirection'   => 5,
+                    'httpversion'   => '1.0',
+                    'blocking'      => true,
+                    'headers'       => array(),
+                    'body'          => $data
                 )
             );
 
@@ -1119,11 +1119,23 @@ if (!class_exists('Licensing\EpitroveLicense')) {
                 return;
             }
 
+            $registered_email = get_option(REGISTERED_EMAIL_KEY, '');
+
+            if (empty($registered_email)) {
+                error_log("No registered email found");
+                return;
+            }
+
             foreach ($all_epitrove_products as $product_data) {
-                $product_path = WP_PLUGIN_DIR . $product_data['baseFolderDir'];
-                if (self::isLicenseActive($product_data[$product_path])) {
-                    new \Licensing\EpitroveUpdater($product_data['baseFolderDir'].'/'.$product_data['mainFileName'], $product_data);
+                $product_path = $product_data['baseFolderDir'];
+                if (self::isLicenseActive($product_path)) {
+                    new \Licensing\EpitroveUpdater(
+                        $product_data['baseFolderDir'].'/'.$product_data['mainFileName'],
+                        $product_data,
+                        $registered_email
+                    );
                 }
+                unset($product_data);
             }
         }
     }
