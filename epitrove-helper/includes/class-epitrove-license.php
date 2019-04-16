@@ -143,32 +143,30 @@ if (!class_exists('Licensing\EpitroveLicense')) {
 
         public function saveEmailDetails()
         {
-            if (! array_key_exists('epitrove-email-save', $_POST) && 'Save Email' !== $_POST['epitrove-email-save']) {
-                return;
-            }
-
-            $registered_email = trim($_POST[REGISTERED_EMAIL_KEY]);
-
-            if (empty($registered_email)) {
+            if (array_key_exists('epitrove-email-save', $_POST) && 'Save Email' !== $_POST['epitrove-email-save']) {
+                $registered_email = trim($_POST[REGISTERED_EMAIL_KEY]);
+    
+                if (empty($registered_email)) {
+                    return array(
+                        'type' =>  'error',
+                        'message'   =>  __('Please enter valid email address', 'epitrove-licensing')
+                    );
+                }
+    
+                if (! filter_var($registered_email, FILTER_VALIDATE_EMAIL)) {
+                    return array(
+                        'type' =>  'error',
+                        'message'   =>  __('Incorrect email format', 'epitrove-licensing')
+                    );
+                }
+    
+                update_option(REGISTERED_EMAIL_KEY, $registered_email);
+    
                 return array(
-                    'type' =>  'error',
-                    'message'   =>  __('Please enter valid email address', 'epitrove-licensing')
+                    'type'  =>  'success',
+                    'message'   =>  __('Registered email saved properly ', 'epitrove-licensing')
                 );
             }
-
-            if (! filter_var($registered_email, FILTER_VALIDATE_EMAIL)) {
-                return array(
-                    'type' =>  'error',
-                    'message'   =>  __('Incorrect email format', 'epitrove-licensing')
-                );
-            }
-
-            update_option(REGISTERED_EMAIL_KEY, $registered_email);
-
-            return array(
-                'type'  =>  'success',
-                'message'   =>  __('Registered email saved properly ', 'epitrove-licensing')
-            );
         }
 
         /**
