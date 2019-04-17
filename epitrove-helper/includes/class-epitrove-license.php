@@ -13,50 +13,21 @@ if (!class_exists('Licensing\EpitroveLicense')) {
 
         public function __construct()
         {
-            //Constants
-            if (!defined('LICENSE_KEY')) {
-                define('LICENSE_KEY', '_license_key');
-            }
+            $this->pluginSlug = 'epitrove-helper';
 
-            if (!defined('EPITROVE_CONFIG_FILE')) {
-                define('EPITROVE_CONFIG_FILE', 'epitrove-config.php');
-            }
-
-            if (!defined('REGISTERED_EMAIL_KEY')) {
-                define('REGISTERED_EMAIL_KEY', 'epi_registered_email');
-            }
-
-            if (!defined('VALID')) {
-                define('VALID', 'valid');
-            }
-
-            if (!defined('EXPIRED')) {
-                define('EXPIRED', 'expired');
-            }
-
-            if (!defined('INVALID')) {
-                define('INVALID', 'invalid');
-            }
-
-            if (!defined('LICENSING_URL')) {
-                define('LICENSING_URL', 'http://licensing.local');
-            }
-
-            if (!defined('ACTIVATION_CODE')) {
-                define('ACTIVATION_CODE', 201);
-            }
-
-            $this->pluginSlug = 'epitrove-licensing';
+            $this->defineEpiConstants();
 
             $this->setAllEpiProducts();
 
             $this->validateLicenseData();
 
+            $this->checkEpiProductUpdates();
+
             add_action('admin_menu', array($this, 'addLicenseMenu'));
 
 
             // Schedule checks
-            // add_action('init', array($this, 'updateLicenseStatus'));
+            // add_action('admin_init', array($this, 'updateLicenseStatus'));
 
             // add_action('admin_enqueue_scripts', array($this, 'enqueueLicenseStyles'));
             // Check for updates
@@ -172,32 +143,30 @@ if (!class_exists('Licensing\EpitroveLicense')) {
 
         public function saveEmailDetails()
         {
-            if (! array_key_exists('epitrove-email-save', $_POST) && 'Save Email' !== $_POST['epitrove-email-save']) {
-                return;
-            }
-
-            $registered_email = trim($_POST[REGISTERED_EMAIL_KEY]);
-
-            if (empty($registered_email)) {
+            if (array_key_exists('epitrove-email-save', $_POST) && 'Save Email' !== $_POST['epitrove-email-save']) {
+                $registered_email = trim($_POST[REGISTERED_EMAIL_KEY]);
+    
+                if (empty($registered_email)) {
+                    return array(
+                        'type' =>  'error',
+                        'message'   =>  __('Please enter valid email address', 'epitrove-licensing')
+                    );
+                }
+    
+                if (! filter_var($registered_email, FILTER_VALIDATE_EMAIL)) {
+                    return array(
+                        'type' =>  'error',
+                        'message'   =>  __('Incorrect email format', 'epitrove-licensing')
+                    );
+                }
+    
+                update_option(REGISTERED_EMAIL_KEY, $registered_email);
+    
                 return array(
-                    'type' =>  'error',
-                    'message'   =>  __('Please enter valid email address', 'epitrove-licensing')
+                    'type'  =>  'success',
+                    'message'   =>  __('Registered email saved properly ', 'epitrove-licensing')
                 );
             }
-
-            if (! filter_var($registered_email, FILTER_VALIDATE_EMAIL)) {
-                return array(
-                    'type' =>  'error',
-                    'message'   =>  __('Incorrect email format', 'epitrove-licensing')
-                );
-            }
-
-            update_option(REGISTERED_EMAIL_KEY, $registered_email);
-
-            return array(
-                'type'  =>  'success',
-                'message'   =>  __('Registered email saved properly ', 'epitrove-licensing')
-            );
         }
 
         /**
@@ -273,13 +242,13 @@ if (!class_exists('Licensing\EpitroveLicense')) {
             $response = wp_remote_post(
                 $url,
                 array(
-                    'method'      => 'POST',
-                    'timeout' => 45,
-                    'redirection' => 5,
-                    'httpversion' => '1.0',
-                    'blocking' => true,
-                    'headers' => array(),
-                    'body'        => $data
+                    'method'        => 'POST',
+                    'timeout'       => 45,
+                    'redirection'   => 5,
+                    'httpversion'   => '1.0',
+                    'blocking'      => true,
+                    'headers'       => array(),
+                    'body'          => $data
                 )
             );
 
@@ -423,7 +392,7 @@ if (!class_exists('Licensing\EpitroveLicense')) {
             $transient = get_transient($this->slug);
 
             // If set and valid, return.
-            if ('active' === $transient) {
+            if (VALID === $transient) {
                 error_log('Active...');
                 return;
             }
@@ -564,15 +533,15 @@ if (!class_exists('Licensing\EpitroveLicense')) {
             }
 
             // Delete transients for scheduled checks
-            WdmLicense::setVersionInfoCache('epi_'.$plugin_information['pluginSlug'].'_license_trans', 0, 'deactivated');
+            self::setVersionInfoCache('epi_'.$plugin_information['pluginSlug'].'_license_trans', 0, 'deactivated');
         }
 
         public static function isActive($slug)
         {
             // Get license status
-            $status = get_option($slug . '_license_status');
+            $status = get_option('epi_' . $slug . '_license_status');
 
-            if ('activated' === $status) {
+            if (VALID === $status) {
                 return true;
             }
 
@@ -615,6 +584,8 @@ if (!class_exists('Licensing\EpitroveLicense')) {
                 }
             }
 
+            // Fetch all necessary data for all epitrove themes
+            $theme_data = null;
             foreach ($epitrove_themes as $theme_name) {
                 $theme_data = include_once(get_theme_root() . '/' . $theme_name . '/'. EPITROVE_CONFIG_FILE);
                 if (!empty($theme_data)) {
@@ -668,7 +639,6 @@ if (!class_exists('Licensing\EpitroveLicense')) {
                 }
                 $this->displayProductLicense($product_data);
             }
-
 
             if ($inactive_epi_plugins === count($epi_products)) {
                 ?>
@@ -772,7 +742,6 @@ if (!class_exists('Licensing\EpitroveLicense')) {
         public function getStatus($product_data, &$previousStatus)
         {
             $status = get_option('epi_' . $product_data['pluginSlug'] . '_license_status');
-            error_log('Current Status : '.print_r($status, 1));
 
             if (isset($GLOBALS['epi_server_null_response_' . $product_data['pluginSlug']]) && $GLOBALS['epi_server_null_response_' . $product_data['pluginSlug']]) {
                 $status = 'server_did_not_respond';
@@ -831,7 +800,7 @@ if (!class_exists('Licensing\EpitroveLicense')) {
         public function showServerResponse($product_data, $status, $display)
         {
             $successMessages = array(
-            VALID => __('Your license key is activated('.$product_data['pluginName'].')', $this->pluginSlug),
+                VALID => __('Your license key is activated('.$product_data['pluginName'].')', $this->pluginSlug),
             );
 
             $errorMessages = array(
@@ -1073,6 +1042,99 @@ if (!class_exists('Licensing\EpitroveLicense')) {
             $registered_email = get_option(REGISTERED_EMAIL_KEY, '');
             
             return $registered_email;
+        }
+
+        public static function isLicenseActive($plugin_dir)
+        {
+            if (empty($plugin_dir)) {
+                return false;
+            }
+
+            $licensing_data = null;
+            $licensing_data = include($plugin_dir.'/epitrove-config.php');
+
+            if (empty($licensing_data) || ! is_array($licensing_data)) {
+                error_log("Incorrect file permissions or config file not found");
+                return false;
+            }
+        
+            if (self::isActive($licensing_data['pluginSlug'])) {
+                return true;
+            }
+
+            return false;
+        }
+
+        public function defineEpiConstants()
+        {
+            //Constants
+            if (!defined('LICENSE_KEY')) {
+                define('LICENSE_KEY', '_license_key');
+            }
+
+            if (!defined('EPITROVE_CONFIG_FILE')) {
+                define('EPITROVE_CONFIG_FILE', 'epitrove-config.php');
+            }
+
+            if (!defined('REGISTERED_EMAIL_KEY')) {
+                define('REGISTERED_EMAIL_KEY', 'epi_registered_email');
+            }
+
+            if (!defined('VALID')) {
+                define('VALID', 'valid');
+            }
+
+            if (!defined('EXPIRED')) {
+                define('EXPIRED', 'expired');
+            }
+
+            if (!defined('INVALID')) {
+                define('INVALID', 'invalid');
+            }
+
+            if (!defined('LICENSING_URL')) {
+                // @TODO : Update to https://api.epitrove.com
+                define('LICENSING_URL', 'http://licensing.local');
+            }
+
+            if (!defined('ACTIVATION_CODE')) {
+                define('ACTIVATION_CODE', 201);
+            }
+        }
+
+        private function checkEpiProductUpdates()
+        {
+            $all_epitrove_products = $this->getAllEpiProductsData();
+            
+            if (empty($all_epitrove_products)) {
+                return;
+            }
+
+            require_once 'class-epitrove-updater.php';
+
+            if (! class_exists('\Licensing\EpitroveUpdater')) {
+                error_log("Updater Class Not Found");
+                return;
+            }
+
+            $registered_email = get_option(REGISTERED_EMAIL_KEY, '');
+
+            if (empty($registered_email)) {
+                error_log("No registered email found");
+                return;
+            }
+
+            foreach ($all_epitrove_products as $product_data) {
+                $product_path = $product_data['baseFolderDir'];
+                if (self::isLicenseActive($product_path)) {
+                    new \Licensing\EpitroveUpdater(
+                        $product_data['baseFolderDir'].'/'.$product_data['mainFileName'],
+                        $product_data,
+                        $registered_email
+                    );
+                }
+                unset($product_data);
+            }
         }
     }
 }
