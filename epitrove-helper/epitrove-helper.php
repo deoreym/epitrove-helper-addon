@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Epitrove Helper (Beta 1)
+ * Plugin Name:       Epitrove Helper (Beta 2)
  * Plugin URI:        http://wisdmlabs.com
  * Description:       Licensing addon for all epitrove products.
  * Version:           0.1.0
