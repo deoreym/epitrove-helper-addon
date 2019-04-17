@@ -3,7 +3,7 @@
  * Plugin Name:       Epitrove Helper (Beta 1)
  * Plugin URI:        http://wisdmlabs.com
  * Description:       Licensing addon for all epitrove products.
- * Version:           2.0.0
+ * Version:           0.0.1
  * Author:            WisdmLabs
  * Author URI:        http://wisdmlabs.com/
  * License:           GPL-2.0+
