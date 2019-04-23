@@ -1093,8 +1093,7 @@ if (!class_exists('Licensing\EpitroveLicense')) {
             }
 
             if (!defined('LICENSING_URL')) {
-                // @TODO : Update to https://api.epitrove.com
-                define('LICENSING_URL', 'http://licensing.local');
+                define('LICENSING_URL', 'https://api.epitrove.com');
             }
 
             if (!defined('ACTIVATION_CODE')) {
