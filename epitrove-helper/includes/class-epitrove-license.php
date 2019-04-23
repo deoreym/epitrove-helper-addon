@@ -143,7 +143,7 @@ if (!class_exists('Licensing\EpitroveLicense')) {
 
         public function saveEmailDetails()
         {
-            if (array_key_exists('epitrove-email-save', $_POST) && 'Save Email' !== $_POST['epitrove-email-save']) {
+            if (array_key_exists('epitrove-email-save', $_POST) && 'Save Email' === $_POST['epitrove-email-save']) {
                 $registered_email = trim($_POST[REGISTERED_EMAIL_KEY]);
     
                 if (empty($registered_email)) {
