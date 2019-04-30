@@ -11,7 +11,7 @@ if (!class_exists('Licensing\EpitroveUpdater')) {
      */
     class EpitroveUpdater
     {
-        private $apiUrl = '';
+        private $apiUrl = 'https://api.epitrove.com/';
         private $apiData = array();
         private $name = '';
         private $slug = '';
@@ -38,7 +38,6 @@ if (!class_exists('Licensing\EpitroveUpdater')) {
          */
         public function __construct($pluginFile, $apiData = null, $activation_email)
         {
-            $this->apiUrl = trailingslashit($apiData['storeUrl']);
             $this->apiData = urlencode_deep($apiData);
             if (!isset($apiData['isTheme']) || !$apiData['isTheme']) {
                 $this->name = plugin_basename($pluginFile);
