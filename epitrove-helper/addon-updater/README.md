@@ -1,3 +1,0 @@
-Epitrove Update Checker
-=====================
-
