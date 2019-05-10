@@ -43,7 +43,7 @@ if (!class_exists('Licensing\EpitroveLicense')) {
             }
 
             if (!defined('LICENSING_URL')) {
-                define('LICENSING_URL', 'https://api.epitrove.com');
+                define('LICENSING_URL', 'https://api.epitrove.com/v1');
             }
 
             if(!defined('EPITROVE_WEBSITE_URL')){
