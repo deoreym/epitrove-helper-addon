@@ -15,3 +15,111 @@
     font-weight: bold;
     padding: 1% 0;
 }
+.wdm-home-page-banner-text-content-license {
+    border-top: 1px solid #eee;
+    padding: 10px 15px 13px;
+    margin-top: 15px;
+    overflow: hidden;
+    display: block;
+    background:#fff;
+    border-width: 1px 0px 0px;
+}
+.wdm-home-page-banner-text-content-license.step-two {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+}
+.wdm-home-page-banner-text-content-license.step-two .legend {
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+.wdm-home-page-banner-text-content-license:hover {
+    background:#fff; 
+}
+.wdm-home-page-banner-text-content-license .legend {
+    font-size: 15px;
+    font-weight: bold;
+    color: #0182b6;
+    margin-top: 5px;
+}
+.wdm-plugin-activation-field {
+    margin-top: 6px;
+}
+.wdm-plugin-activation-field input[type=text] {
+    padding: 6px;
+}
+.wdm-plugin-activation-field input[type=submit]{
+    height: 30px;
+    line-height: 28px;
+    margin-left: 8px;
+}
+.wdm-plugin-activation-field p {
+    margin: 14px 0px 2px 0px;
+}
+.wdm-admin-license-management-wrap {
+    padding-top: 15px;
+}
+.wdm-admin-license-management-wrap h2 {
+    margin: 0px;
+    padding: 0px 15px;
+}
+.wdm-admin-license-management-wrap .steps-meta {
+    padding: 0px 15px;
+}
+.epitrove-license-table {
+    background-color: white;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px
+}
+.epitrove-license-table tr {
+    border-bottom: 1px solid #e1e1e1;
+    line-height: 4;
+}
+.epitrove-license-table tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+.epitrove-license-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.epitrove-license-table .product-name-head, .epitrove-license-table .product-name {
+    text-align: left;
+    width: 30%;
+    padding-left: 1%;
+    font-weight: 700;
+}
+.epitrove-license-table .license-key-head,
+.epitrove-license-table  .license-status-head,
+.epitrove-license-table .actions-head {
+    font-weight: 700;
+}
+.epitrove-license-table .license-key-head, .epitrove-license-table .license-key {
+    width: 30%;
+    text-align: left;
+}
+.epitrove-license-table  .license-status-head,.epitrove-license-table .license-status {
+    width: 15%;
+    text-align: left;
+}
+.epitrove-license-table .actions-head, .epitrove-license-table .wdm-actions {
+    width: 15%;
+    text-align: left;
+}
+.epitrove-license-table tr td input[type=submit] {
+    margin-top: 12px;
+}
+.epitrove-license-table tr td input[value=Activate] {
+    background: #0085ba;
+    border-color: #0073aa #006799 #006799;
+    box-shadow: 0 1px 0 #006799;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+}
+.epitrove-license-table tr td input[value=Activate]:hover,
+.epitrove-license-table tr td input[value=Activate]:active,
+.epitrove-license-table tr td input[value=Activate]:focus {
+    background: #008ec2;
+    border-color: #006799;
+    color: #fff;
+}
