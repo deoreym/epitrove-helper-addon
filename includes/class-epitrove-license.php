@@ -43,11 +43,11 @@ if (!class_exists('Licensing\EpitroveLicense')) {
             }
 
             if (!defined('LICENSING_URL')) {
-                define('LICENSING_URL', 'https://api.epitrove.com/v1');
+                define('LICENSING_URL', 'https://api.epitrove-uat.wisdmlabs.net/v1');
             }
 
             if(!defined('EPITROVE_WEBSITE_URL')){
-                define('EPITROVE_WEBSITE_URL', 'https://epitrove.com');
+                define('EPITROVE_WEBSITE_URL', 'https://epitrove-uat.wisdmlabs.net');
             }
 
             if(!defined('EPITROVE_API_SUCCESS_CODE')){
